@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Kelvin Chenxin Sun</title>
+<meta name="description" content="Kelvin Chenxin Sun · Building the talent graph for the AI era. 孙辰昕 · 为 AI 时代构建人才图谱">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;900&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+/* Layout: editorial portfolio. Live talent-graph canvas behind the hero; career told as "chapters", each led by one oversized result; quotes as a single rotating stage; giant email to close. */
+:root{
+  --paper:#e7eae2;
+  --ink:#0d110e;
+  --ink-2:#4d554c;
+  --rule:#c3c9bd;
+  --signal:#2c3cff;
+  --signal-wash:#d9dcf6;
+  --card:#f1f3ed;
+  --f-wide:"Archivo","Noto Sans SC",system-ui,sans-serif;
+  --f-serif:"Instrument Serif","Noto Serif SC",Georgia,serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --f-zh:"Noto Sans SC","PingFang SC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--paper:#0c0f0d;--ink:#e6e9e1;--ink-2:#99a196;--rule:#283029;--signal:#8b95ff;--signal-wash:#191d3a;--card:#131814;color-scheme:dark}
+}
+:root[data-theme="dark"]{--paper:#0c0f0d;--ink:#e6e9e1;--ink-2:#99a196;--rule:#283029;--signal:#8b95ff;--signal-wash:#191d3a;--card:#131814;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-wide);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.zh{font-family:var(--f-zh)}
+body:not(.zh) .zh{display:none!important}
+body.zh .en{display:none!important}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:3px}
+.gut{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.inner{max-width:1240px;margin:0 auto}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;color:var(--ink-2)}
+.wide{font-stretch:125%}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.top .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.mark{font-weight:800;font-stretch:125%;font-size:15px;letter-spacing:-.01em;text-decoration:none;display:flex;align-items:baseline;gap:10px}
+.mark small{font-family:var(--f-zh);font-weight:500;font-size:13px;color:var(--ink-2);font-stretch:100%}
+.top nav{display:flex;gap:22px;font-size:14px}
+.top nav a{text-decoration:none;color:var(--ink-2)}
+.top nav a:hover{color:var(--ink)}
+.lang{display:flex;gap:2px;border:1px solid var(--ink);border-radius:999px;padding:2px}
+.lang button{font:600 12px var(--f-mono);border:0;background:none;color:var(--ink);padding:4px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--rule)}
+#graph{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero .inner{position:relative;padding-block:clamp(56px,9vw,120px) 40px;display:flex;flex-direction:column;gap:32px;pointer-events:none}
+.hero .inner a,.hero .inner button{pointer-events:auto}
+.kicker{display:flex;flex-wrap:wrap;gap:8px 18px}
+.kicker span{display:inline-flex;align-items:center;gap:8px}
+.kicker i{width:8px;height:8px;border-radius:50%;background:var(--signal)}
+h1{margin:0;font-weight:800;font-stretch:125%;font-size:clamp(42px,8.4vw,128px);line-height:.92;letter-spacing:-.035em;max-width:11ch;text-wrap:balance}
+h1 .zh{font-family:var(--f-zh);font-weight:900;font-stretch:100%;letter-spacing:-.01em;line-height:1.08;max-width:9em;display:block}
+h1 em{font-family:var(--f-serif);font-style:italic;font-weight:400;font-stretch:100%;letter-spacing:-.01em;color:var(--signal)}
+h1 .zh em{font-family:var(--f-zh);font-style:normal;font-weight:900}
+.lede{margin:0;max-width:34em;font-size:clamp(17px,1.6vw,21px);line-height:1.5;background:color-mix(in srgb,var(--paper) 70%,transparent)}
+.lede.zh{line-height:1.8}
+.hero-foot{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;padding-top:8px}
+
+/* signals */
+.signals .inner{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--rule)}
+.sig{padding:28px 24px 26px 0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sig+.sig{border-left:1px solid var(--rule);padding-left:24px}
+.sig b{font-weight:800;font-stretch:112%;font-size:clamp(28px,3.4vw,46px);line-height:1;letter-spacing:-.025em}
+.sig span{font-size:14px;color:var(--ink-2)}
+
+/* section heads */
+.sec{padding-block:clamp(64px,9vw,120px) 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+h2{margin:0;font-weight:800;font-stretch:125%;font-size:clamp(34px,5vw,64px);line-height:.95;letter-spacing:-.03em}
+h2 .zh{font-family:var(--f-zh);font-weight:900;font-stretch:100%;letter-spacing:0}
+h2 em{font-family:var(--f-serif);font-style:italic;font-weight:400;font-stretch:100%;color:var(--signal)}
+
+/* path index */
+.path{display:flex;gap:0;overflow-x:auto;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);margin-bottom:8px;scrollbar-width:none}
+.path::-webkit-scrollbar{display:none}
+.path a{flex:1 0 auto;min-width:118px;text-decoration:none;padding:12px 14px 12px 0;display:flex;flex-direction:column;gap:2px;position:relative}
+.path a::before{content:"";width:9px;height:9px;border-radius:50%;border:2px solid var(--ink-2);position:absolute;top:-6px;left:0;background:var(--paper)}
+.path a.f::before{background:var(--signal);border-color:var(--signal)}
+.path a:hover b{color:var(--signal)}
+.path b{font-size:14px;font-weight:600}
+.path-legend{display:flex;gap:18px;margin-bottom:12px}
+.path-legend span{display:inline-flex;align-items:center;gap:7px}
+.path-legend i{width:9px;height:9px;border-radius:50%;border:2px solid var(--ink-2)}
+.path-legend i.f{background:var(--signal);border-color:var(--signal)}
+
+/* chapters */
+.ch{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr) minmax(0,330px);gap:clamp(20px,3vw,48px);padding-block:44px;border-bottom:1px solid var(--rule);scroll-margin-top:72px}
+.ch-yr{display:flex;flex-direction:column;gap:10px}
+.ch-yr .big{font-weight:800;font-stretch:112%;font-size:clamp(34px,3.6vw,52px);line-height:.95;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1.2px var(--ink)}
+.tag{align-self:start;font:600 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--signal);color:var(--paper)}
+.ch-main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ch-name{margin:0;font-weight:800;font-stretch:118%;font-size:clamp(30px,4vw,54px);line-height:1;letter-spacing:-.03em}
+body.zh .ch-name{font-family:var(--f-zh);font-weight:900;font-stretch:100%;letter-spacing:0}
+.ch-role{font-size:14px;color:var(--ink-2)}
+.ch-line{margin:6px 0 0;font-family:var(--f-serif);font-style:italic;font-size:clamp(22px,2.2vw,30px);line-height:1.22;max-width:24em;text-wrap:balance}
+body.zh .ch-line{font-family:"Noto Serif SC",serif;font-style:normal;font-weight:500;font-size:clamp(19px,1.8vw,24px);line-height:1.6}
+.more{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column}
+.more li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;padding-block:10px;border-top:1px dashed var(--rule);font-size:15px}
+.more li .mono{font-size:11px;padding-top:3px;text-transform:uppercase}
+.more a{text-decoration-color:var(--signal);text-underline-offset:3px}
+.key{align-self:start;background:var(--signal-wash);border-top:3px solid var(--signal);padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px}
+.key .mono{color:var(--signal);text-transform:uppercase;font-size:11px}
+.key b{font-weight:800;font-stretch:112%;font-size:clamp(34px,4vw,56px);line-height:.98;letter-spacing:-.035em;color:var(--signal);overflow-wrap:anywhere}
+.key b.txt{font-size:clamp(26px,2.6vw,36px);line-height:1.05}
+body.zh .key b{font-family:var(--f-zh);font-weight:900;font-stretch:100%;letter-spacing:-.01em}
+.key span{font-size:15px;line-height:1.45}
+
+/* perspectives */
+.stage{position:relative;border-top:1px solid var(--ink);padding-top:28px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+.q{margin:0;font-family:var(--f-serif);font-size:clamp(32px,5.2vw,76px);line-height:1.04;letter-spacing:-.015em;max-width:17em;text-wrap:balance;min-height:2.2em}
+body.zh .q{font-family:"Noto Serif SC",serif;font-weight:700;font-size:clamp(26px,3.8vw,52px);line-height:1.35;letter-spacing:0}
+.q-cite{grid-column:1/-1;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;color:var(--ink-2);font-size:15px;border-top:1px solid var(--rule);padding-top:16px}
+.q-cite span:first-child{max-width:40em}
+.q-nav{display:flex;gap:8px;align-items:center}
+.q-nav button{width:44px;height:44px;border-radius:50%;border:1px solid var(--ink);background:none;color:var(--ink);font-size:18px;cursor:pointer}
+.q-nav button:hover{background:var(--ink);color:var(--paper)}
+.q-count{font-family:var(--f-mono);font-size:13px;min-width:3.4em;text-align:center}
+.q-fade{transition:opacity .25s}
+.q-fade.out{opacity:0}
+
+/* press */
+.press a{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr) auto;gap:24px;align-items:baseline;padding-block:22px;border-top:1px solid var(--rule);text-decoration:none}
+.press a:last-child{border-bottom:1px solid var(--rule)}
+.press .out{font-weight:800;font-stretch:125%;font-size:clamp(22px,2.4vw,32px);letter-spacing:-.02em;line-height:1}
+.press .t{font-size:16px;line-height:1.45}
+.press .t small{display:block;color:var(--ink-2);font-size:14px;margin-top:4px}
+.press .d{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);white-space:nowrap}
+.press a:hover .out{color:var(--signal)}
+.press .arr{display:inline-block;transition:transform .2s;margin-left:6px}
+.press a:hover .arr{transform:translate(3px,-3px)}
+
+/* recognition + education */
+.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(32px,5vw,72px)}
+.two h3{margin:0 0 6px;font:600 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.rows div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:16px;padding-block:14px;border-top:1px solid var(--rule);font-size:15px}
+.rows .mono{padding-top:2px}
+
+/* contact */
+.contact{padding-block:clamp(72px,10vw,140px) 40px}
+.contact p{margin:0 0 18px;font-size:18px;max-width:30em}
+.email{display:block;font-weight:800;font-stretch:118%;font-size:clamp(26px,6.6vw,104px);line-height:1;letter-spacing:-.04em;overflow-wrap:anywhere;user-select:all;padding-block:14px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{font:600 14px var(--f-wide);padding:12px 20px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;text-decoration:none}
+.btn.ghost{background:none;color:var(--ink)}
+.btn:hover{background:var(--signal);border-color:var(--signal);color:#fff}
+footer .inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:24px 40px;border-top:1px solid var(--rule)}
+
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media (max-width: 960px){
+  .top nav{display:none}
+  .signals .inner{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sig:nth-child(3){border-left:0;padding-left:0}
+  .sig:nth-child(n+3){border-top:1px solid var(--rule)}
+  .ch{grid-template-columns:minmax(0,1fr)}
+  .ch-yr{flex-direction:row;align-items:center;gap:14px}
+  .key{max-width:460px}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .press a{grid-template-columns:minmax(0,1fr) auto}
+  .press .t{grid-column:1/-1;grid-row:2}
+}
+@media (max-width: 560px){
+  .signals .inner{grid-template-columns:minmax(0,1fr)}
+  .sig,.sig+.sig{border-left:0;padding-left:0}
+  .sig+.sig{border-top:1px solid var(--rule)}
+  .more li{grid-template-columns:minmax(0,1fr);gap:2px}
+  .stage{grid-template-columns:minmax(0,1fr)}
+  .mark small{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top gut">
+  <div class="inner">
+    <a class="mark" href="#top">KELVIN SUN <small>孙辰昕</small></a>
+    <nav aria-label="Sections">
+      <a href="#chapters"><span class="en">Chapters</span><span class="zh">经历</span></a>
+      <a href="#perspectives"><span class="en">Perspectives</span><span class="zh">观点</span></a>
+      <a href="#press"><span class="en">Press</span><span class="zh">报道</span></a>
+      <a href="#contact"><span class="en">Contact</span><span class="zh">联系</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="btn-en" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" id="btn-zh" data-lang="zh" aria-pressed="false">中文</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero gut" id="top">
+  <canvas id="graph" aria-hidden="true"></canvas>
+  <div class="inner">
+    <div class="kicker mono"><span><i></i><span class="en">AI talent · Founder · Ex-Sequoia</span><span class="zh">AI 人才 · 创业者 · 前红杉</span></span><span class="en">Los Angeles · Beijing</span><span class="zh">洛杉矶 · 北京</span></div>
+    <h1><span class="en">Building the <em>talent graph</em> for the AI era.</span><span class="zh">为 AI 时代构建<em>人才图谱</em>。</span></h1>
+    <p class="lede en">I'm Kelvin Sun. For 16 years I've worked on one question: who can build what comes next. First inside companies, then beside investors, now as a founder. I read people by the decisions they made and the things they shipped, not by their titles.</p>
+    <p class="lede zh">我是孙辰昕。十六年来，我一直在回答一个问题：谁能把下一件事做成。先在企业内部，再到投资机构身边，如今亲自创业。我看一个人，看他做过的决定与交付的东西，而不是头衔。</p>
+    <div class="hero-foot">
+      <span class="mono"><span class="en">Open to talent leadership roles, advisory and partnerships</span><span class="zh">欢迎人才负责人岗位、顾问与商业合作的交流</span></span>
+      <a class="btn" href="#contact"><span class="en">Get in touch</span><span class="zh">联系我</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec gut" id="chapters">
+  <div class="inner">
+    <div class="sec-head">
+      <h2><span class="en">Eight <em>chapters</em></span><span class="zh">八段<em>经历</em></span></h2>
+      <div class="path-legend mono"><span><i class="f"></i><span class="en">Founded</span><span class="zh">创立 / 联创</span></span><span><i></i><span class="en">Joined</span><span class="zh">任职</span></span></div>
+    </div>
+    <nav class="path" id="path" aria-label="Career path"></nav>
+    <div id="chs"></div>
+  </div>
+</section>
+
+<section class="sec gut" id="perspectives">
+  <div class="inner">
+    <div class="sec-head"><h2><span class="en">On <em>talent</em></span><span class="zh">关于<em>人才</em></span></h2></div>
+    <div class="stage">
+      <blockquote class="q q-fade" id="q"></blockquote>
+      <div class="q-nav">
+        <button type="button" id="q-prev" aria-label="Previous quote">←</button>
+        <span class="q-count" id="q-count"></span>
+        <button type="button" id="q-next" aria-label="Next quote">→</button>
+      </div>
+      <div class="q-cite q-fade" id="q-cite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gut" id="press">
+  <div class="inner">
+    <div class="sec-head"><h2><span class="en">In the <em>press</em></span><span class="zh">媒体<em>报道</em></span></h2><span class="mono"><span class="en">Interviews and quotes</span><span class="zh">个人受访 / 引用</span></span></div>
+    <div class="press" id="pressList"></div>
+  </div>
+</section>
+
+<section class="sec gut" id="recognition">
+  <div class="inner two">
+    <div>
+      <h3><span class="en">Recognition &amp; talks</span><span class="zh">荣誉与活动</span></h3>
+      <div class="rows" id="recog"></div>
+    </div>
+    <div>
+      <h3><span class="en">Education</span><span class="zh">教育背景</span></h3>
+      <div class="rows" id="edu"></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact gut" id="contact">
+  <div class="inner">
+    <p><span class="en">Talent leadership roles, advisory work or partnerships. Write to me.</span><span class="zh">人才负责人岗位、顾问合作或商业合作，欢迎来信。</span></p>
+    <span class="email" id="email">kelvinsun58@gmail.com</span>
+    <div class="cta">
+      <button type="button" class="btn" id="copy"><span class="en">Copy email</span><span class="zh">复制邮箱</span></button>
+      <a class="btn ghost" href="https://www.linkedin.com/in/kelvin-sun-91192053" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer class="gut"><div class="inner mono"><span>© 2026 Kelvin Chenxin Sun · 孙辰昕</span><span class="en">Beijing → Los Angeles</span><span class="zh">北京 → 洛杉矶</span></div></footer>
+
+<script>
+(function(){
+var L='en';
+function t(o){return typeof o==='string'?o:(o[L]||o.en)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+var SIGNALS=[
+  {v:{en:'US$4M',zh:'400 万美元'},c:{en:'ARR at DINQ, 30 top-tier customers',zh:'DINQ 年经常性收入，30 家头部客户'}},
+  {v:'30',c:{en:'Founding teams built for Sequoia China portfolio companies',zh:'为红杉中国被投企业深度搭建的创始团队'}},
+  {v:'#2',c:{en:'Amazon travel category, with artrips (exited)',zh:'artrips 亚马逊旅行类目排名（已退出）'}},
+  {v:'Povey',c:{en:'Led Xiaomi’s hire of the Kaldi creator',zh:'主导小米引进 Kaldi 作者 Daniel Povey'}}
+];
+
+var CH=[
+ {id:'dinq',yr:'2025',span:{en:'Jun 2025 – now',zh:'2025.06 – 至今'},f:1,name:'DINQ',short:'DINQ',
+  role:{en:'Co-founder & COO · Strategic Advisor (from Sep 2026) · Beijing, Bay Area, Los Angeles',zh:'联合创始人兼 COO · 战略顾问（2026.09 起）· 北京、湾区、洛杉矶'},
+  line:{en:'Turned 16 years of talent judgment into a product: an AI-native map of who is building AI.',zh:'把 16 年的人才判断做成产品：一张 AI 原生的 AI 人才图谱。'},
+  key:{k:{en:'Revenue',zh:'收入'},v:{en:'US$4M ARR',zh:'ARR 400 万美元'},c:{en:'30 top-tier customers',zh:'30 家头部客户'}},
+  more:[
+   {k:{en:'Fundraising',zh:'融资'},v:{en:'RMB 10M across 2 rounds, backed by well-known USD funds',zh:'两轮共 1,000 万元人民币，知名美元基金投资'}},
+   {k:{en:'Product',zh:'产品'},v:{en:'dinq.me, talent search engine for AI builders',zh:'dinq.me，面向 AI 人才的搜索引擎'},href:'https://dinq.me'},
+   {k:{en:'2026.06 Live',zh:'2026.06 直播'},v:{en:'Sole guest on DeepTech’s 106-min livestream; live demo found 23 active Bay Area AI researchers in real time',zh:'DeepTech「深科技内参」106 分钟专场唯一特邀嘉宾，现场实时发现 23 位活跃的湾区 AI 研究员'}}
+  ]},
+ {id:'galxe',yr:'2025',span:{en:'Jan – Jul 2025',zh:'2025.01 – 2025.07'},f:0,name:'Galxe',short:'Galxe',
+  role:{en:'Director, Global Leadership Team · Asia, remote',zh:'总监，全球领导团队成员 · 亚洲，远程'},
+  line:{en:'Helped a Web3 company rebuild itself around AI, starting with the team.',zh:'以团队为起点，帮助一家 Web3 公司转向 AI。'},
+  key:{k:{en:'Transformation',zh:'转型'},v:'~20',c:{en:'AI-native team built from scratch',zh:'从零搭建的 AI Native 新团队'}},
+  more:[{k:{en:'Incubation',zh:'孵化'},v:{en:'3 AI projects incubated: AI trading, neobank, AI gaming',zh:'孵化 3 个 AI 项目：AI 交易、Neo Bank、AI 游戏'}}]},
+ {id:'seaone',yr:'2022',span:{en:'May 2022 – Jan 2025',zh:'2022.05 – 2025.01'},f:1,name:'SeaOne · artrips',short:'SeaOne',
+  role:{en:'Founder · Shenzhen',zh:'创始人 · 深圳'},
+  line:{en:'Built a cross-border travel brand from zero to the top of Amazon, then sold it.',zh:'从零做出一个跨境旅行品牌，做到亚马逊类目前列，并成功退出。'},
+  key:{k:'Amazon',v:'#2',c:{en:'In Amazon’s travel category, with the brand artrips',zh:'旗下品牌 artrips 位列亚马逊旅行类目 Top 2'}},
+  more:[{k:{en:'Exit',zh:'退出'},v:{en:'Founded and exited the travel lifestyle brand artrips',zh:'创立并成功退出出境旅行生活方式品牌 artrips'}}]},
+ {id:'lighthouse',yr:'2021',span:{en:'May 2021 – May 2022',zh:'2021.05 – 2022.05'},f:0,name:{en:'Lighthouse Capital',zh:'光源资本'},short:{en:'Lighthouse',zh:'光源资本'},
+  role:{en:'Executive Director, Value-Added Services & HR · Beijing, reporting to the CEO',zh:'执行董事，增值服务与 HR · 北京，向 CEO 汇报'},
+  line:{en:'Built the services that keep an investment bank useful to founders after the deal closes.',zh:'为精品投行搭建投后服务体系，让创始人在交易之后依然受益。'},
+  key:{k:{en:'Team & platform',zh:'团队与体系'},v:'5',c:{en:'Value-added modules and the VAS team behind them: Talent, PR, GR, Growth, Lighthouse Academy',zh:'5 大增值服务模块与 VAS 投后团队：Talent、PR、GR、增长、光源学院'}},
+  more:[{k:{en:'Partnerships',zh:'合作'},v:{en:'Growth partnerships with TikTok and Kuaishou for portfolio companies',zh:'为被投企业与抖音、快手建立增长合作'}}]},
+ {id:'starter',yr:'2019',span:{en:'Mar 2019 – May 2021',zh:'2019.03 – 2021.05'},f:1,name:{en:'STARTER · V-CRUIT',zh:'STARTER · 雇视'},short:{en:'V-CRUIT',zh:'雇视'},
+  role:{en:'Co-founder & CEO · Beijing',zh:'联合创始人 / CEO · 北京'},
+  line:{en:'Built hiring tools and employer brands for China’s early AI and autonomous-driving companies.',zh:'为中国早期 AI 与自动驾驶公司打造招聘工具与雇主品牌。'},
+  key:{k:{en:'Executive search · 2019',zh:'高端寻访 · 2019'},v:'Daniel Povey',txt:1,c:{en:'Led Xiaomi’s hire of the Kaldi creator as Chief Speech Scientist',zh:'主导小米引进 Kaldi 作者，出任小米首席语音科学家'}},
+  more:[
+   {k:{en:'Funding',zh:'融资'},v:{en:'Angel investors including Li Guangmi, plus seed funding',zh:'李广密等知名投资人个人投资，并完成种子轮'}},
+   {k:{en:'Launch',zh:'上线'},v:{en:'V-CRUIT ranked Top 5 in recruiting; ~100 companies in two weeks, ~100,000 job seekers',zh:'V-CRUIT 招聘求职类目 Top 5；上线两周近百家企业入驻，近 10 万求职者注册'}},
+   {k:{en:'Employer brand',zh:'雇主品牌'},v:{en:'Employer branding for ~20 companies, including Pony.ai, WeRide and Aibee',zh:'为近 20 家企业做雇主品牌，包括小马智行、文远知行、Aibee 等'}},
+   {k:{en:'Advisory',zh:'顾问'},v:{en:'NRL Capital: team building and incentives for the partners',zh:'NRL Capital：为合伙人设计团队搭建与激励机制'}},
+   {k:{en:'Advisory',zh:'顾问'},v:{en:'Delonix Group: hired ~10 executives for new non-hotel businesses',zh:'德胧集团：协助董事长招聘近 10 位高管，支持非酒店业务孵化'}}
+  ]},
+ {id:'sequoia',yr:'2016',span:{en:'Dec 2016 – Mar 2019',zh:'2016.12 – 2019.03'},f:0,name:{en:'Sequoia Capital China',zh:'红杉资本中国'},short:{en:'Sequoia',zh:'红杉中国'},
+  role:{en:'HR & Post-Investment, TMT and Consumer · Beijing',zh:'HR 与投后人才，TMT 及消费 · 北京'},
+  line:{en:'Helped Sequoia China find its founders, then staff the companies it backed.',zh:'帮红杉中国找到创始人，也为被投企业搭起团队。'},
+  key:{k:{en:'Portfolio',zh:'被投企业'},v:'30',c:{en:'Founding teams built in depth across the portfolio',zh:'深度搭建的被投企业创始团队'}},
+  more:[
+   {k:{en:'Team',zh:'团队'},v:{en:'Built Sequoia China’s Seed team',zh:'搭建红杉中国种子基金团队'}},
+   {k:{en:'Program',zh:'项目'},v:{en:'Designed and launched the first Sequoia Fellow cohort',zh:'策划并落地第一期红杉学者 Sequoia Fellow'}},
+   {k:{en:'Campus',zh:'校招'},v:{en:'Two portfolio joint campus campaigns, now an industry benchmark',zh:'执行两届被投企业联合校招，成为行业标杆'}},
+   {k:{en:'Program',zh:'项目'},v:{en:'Co-launched the first Ostrich Club cohort with ZhenFund',zh:'联合真格基金发起第一期鸵鸟会'}}
+  ]},
+ {id:'tr',yr:'2015',span:{en:'Aug 2015 – Dec 2016',zh:'2015.08 – 2016.12'},f:0,name:{en:'Thomson Reuters',zh:'汤森路透'},short:{en:'Thomson Reuters',zh:'汤森路透'},
+  role:{en:'Talent Attraction & Development Consultant · Beijing, reporting to the HR VP',zh:'人才吸引与发展顾问 · 北京，向 HRVP 汇报'},
+  line:{en:'Built Thomson Reuters China’s leadership bench and its next generation of talent.',zh:'为汤森路透中国搭建高管团队，并培养下一代人才。'},
+  key:{k:{en:'Leadership',zh:'高管'},v:{en:'China exec team',zh:'中国区高管团队'},txt:1,c:{en:'Built from the ground up, including 5 executive hires',zh:'从零搭建，含 5 个高管岗位'}},
+  more:[
+   {k:{en:'Program',zh:'项目'},v:{en:'Futurist, a global young-talent graduate program',zh:'Futurist 全球 young talent 管培生项目'}},
+   {k:{en:'Hiring',zh:'招聘'},v:{en:'53 roles filled by Q3 2016; 100% staffing for account management',zh:'截至 2016 Q3 完成 53 个岗位；客户经理团队 Staffing Rate 100%'}}
+  ]},
+ {id:'cfld',yr:'2014',span:{en:'Feb 2014 – Aug 2015',zh:'2014.02 – 2015.08'},f:0,name:{en:'China Fortune Land',zh:'华夏幸福'},short:{en:'CFLD',zh:'华夏幸福'},
+  role:{en:'Organizational Development Supervisor · Beijing',zh:'组织发展主管 · 北京'},
+  line:{en:'Staffed the leadership of a fast-growing group’s subsidiaries.',zh:'为快速扩张的集团子公司配置管理层。'},
+  key:{k:{en:'Hiring',zh:'招聘'},v:'25+',c:{en:'Director-level hires, filled independently',zh:'独立完成的总监级岗位招聘'}},
+  more:[{k:{en:'Talent review',zh:'人才盘点'},v:{en:'Talent reviews, manager appointments and succession planning across subsidiaries',zh:'子公司人才盘点、管理者任命与继任规划'}}]}
+];
+
+var QUOTES=[
+ {q:{en:'“Cash gets people in the door; compute and impact are what keep them.”',zh:'“薪酬让人才进门，算力和影响力才能把他们留下。”'},c:{en:'On the global AI talent race',zh:'谈全球 AI 人才竞争'},s:'CNA · 2026'},
+ {q:{en:'“The hardest part of hiring in AI isn’t sourcing. It’s judgment.”',zh:'“AI 招聘最难的不是寻访，而是判断。”'},c:{en:'Few candidates can explain what they chose not to build, or what broke in production.',zh:'很少有候选人能讲清楚自己选择不做什么、线上出过什么问题。'},s:'LinkedIn · 2026.07'},
+ {q:{en:'“In AI, gradient beats brand much faster than incumbents expect.”',zh:'“在 AI 领域，成长斜率胜过品牌光环的速度，比大公司预想的快得多。”'},c:{en:'Builders follow strong peers, fast product feedback and founders who update quickly.',zh:'优秀的建设者追随强同伴、快速的产品反馈和能迅速调整判断的创始人。'},s:'LinkedIn · 2026.07'},
+ {q:{en:'“If every exception still needs a founder, sales is scaling the on-call schedule.”',zh:'“如果每个异常仍需要创始人出手，销售扩张的其实是值班表。”'},c:{en:'Why AI products should count every human rescue.',zh:'为什么 AI 产品应当统计每一次人工兜底。'},s:'LinkedIn · 2026.09'}
+];
+
+var PRESS=[
+ {o:'CNA',h:'https://www.channelnewsasia.com/east-asia/china-us-ai-talent-race-geopolitics-6203341',t:'Talent, not technology, is reshaping the US-China AI race',n:{en:'Quoted on what attracts and retains top AI talent',zh:'就顶尖 AI 人才的吸引与留任接受采访'},d:'2026.06'},
+ {o:'TecHR Series',h:'https://techrseries.com/career-development/dinq-launches-ai-native-career-network-to-address-global-talent-discovery-problem/',t:'DINQ launches AI-native career network to address global talent discovery problem',n:{en:'Launch coverage; quoted as co-founder & COO',zh:'DINQ 发布报道，以联合创始人兼 COO 身份受访'},d:'2026.01'},
+ {o:'TechFlow',h:'https://www.techflowpost.com/en-US/article/30235',t:'Interview with DINQ: using agents to remove information asymmetry in AI hiring',n:{en:'Interviewed as co-founder on agentic sourcing and pricing',zh:'以联合创始人身份谈 Agent 寻访与定价'},d:'2026.02'},
+ {o:'Z Finance',h:'https://www.woshipm.com/ai/6430955.html',t:'寻找水下的万亿价值：这家公司想用 AI 重构一个关于「人」的世界模型',n:{en:'Profile of DINQ’s Human World Model (Chinese)',zh:'DINQ「Human World Model」专题报道'},d:'2026.07'}
+];
+
+var RECOG=[
+ {d:'2026.06',v:{en:'Invited guest, DeepTech (MIT Technology Review China) 深科技内参 Vol. 7, 106-minute exclusive livestream',zh:'MIT Technology Review China（DeepTech）「深科技内参」第 7 期特邀嘉宾，106 分钟独家直播'}},
+ {d:'2026.06',v:{en:'Judge, SoloVerse Agent Hackathon (50 teams, 48 hours), with Zhipu AI and Huaqing Innovation Base',zh:'SoloVerse·Agent Hackathon 专业评委（50 支队伍、48 小时），合作方包括智谱 AI 与华清创新基地'}},
+ {d:'2026.04',v:{en:'Outstanding Enterprise Award, NVIDIA Inception Beijing Demo Day (DINQ)',zh:'NVIDIA Inception 北京 Demo Day 优秀企业奖（DINQ）'}},
+ {d:'2018.05',v:{en:'Invited speaker, Peking University Entrepreneurship Forum',zh:'北京大学创业论坛特邀演讲嘉宾'}}
+];
+var EDU=[
+ {d:'2012',v:{en:'University of Sydney · Master of Commerce, Organizational Management & HR',zh:'悉尼大学 · 商学硕士，组织管理与人力资源方向'}},
+ {d:'2010',v:{en:'Beijing Normal University · BA, Human Resource Management',zh:'北京师范大学 · 人力资源管理学士'}}
+];
+
+function render(){
+  var path=CH;
+  document.getElementById('path').innerHTML=path.map(function(c){return '<a href="#ch-'+c.id+'" class="'+(c.f?'f':'')+'"><span class="mono">'+c.yr+'</span><b>'+esc(t(c.short))+'</b></a>'}).join('');
+  document.getElementById('chs').innerHTML=CH.map(function(c){
+    var more=(c.more||[]).map(function(m){var v=esc(t(m.v));if(m.href)v='<a href="'+m.href+'" target="_blank" rel="noopener">'+v+' ↗</a>';return '<li><span class="mono">'+esc(t(m.k))+'</span><span>'+v+'</span></li>'}).join('');
+    return '<article class="ch" id="ch-'+c.id+'">'+
+      '<div class="ch-yr"><span class="big">'+c.yr+'</span><span class="mono">'+esc(t(c.span))+'</span>'+(c.f?'<span class="tag">'+(L==='zh'?'创始':'Founder')+'</span>':'')+'</div>'+
+      '<div class="ch-main"><h3 class="ch-name">'+esc(t(c.name))+'</h3><div class="ch-role">'+esc(t(c.role))+'</div><p class="ch-line">'+esc(t(c.line))+'</p>'+(more?'<ul class="more">'+more+'</ul>':'')+'</div>'+
+      '<div class="key"><span class="mono">'+esc(t(c.key.k))+'</span><b'+(c.key.txt?' class="txt"':'')+'>'+esc(t(c.key.v))+'</b><span>'+esc(t(c.key.c))+'</span></div>'+
+    '</article>'}).join('');
+  document.getElementById('pressList').innerHTML=PRESS.map(function(p){return '<a href="'+p.h+'" target="_blank" rel="noopener"><span class="out">'+esc(p.o)+'<span class="arr">↗</span></span><span class="t">'+esc(p.t)+'<small>'+esc(t(p.n))+'</small></span><span class="d">'+p.d+'</span></a>'}).join('');
+  function rows(a){return a.map(function(r){return '<div><span class="mono">'+r.d+'</span><span>'+esc(t(r.v))+'</span></div>'}).join('')}
+  document.getElementById('recog').innerHTML=rows(RECOG);
+  document.getElementById('edu').innerHTML=rows(EDU);
+  showQ(qi,true);
+}
+
+// quotes
+var qi=0,qEl=document.getElementById('q'),cEl=document.getElementById('q-cite'),nEl=document.getElementById('q-count');
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function paintQ(){var q=QUOTES[qi];qEl.textContent=t(q.q);cEl.innerHTML='<span>'+esc(t(q.c))+'</span><span class="mono">'+esc(q.s)+'</span>';nEl.textContent=(qi+1)+' / '+QUOTES.length}
+function showQ(i,now){qi=(i+QUOTES.length)%QUOTES.length;if(now||reduce){paintQ();return}qEl.classList.add('out');cEl.classList.add('out');setTimeout(function(){paintQ();qEl.classList.remove('out');cEl.classList.remove('out')},220)}
+document.getElementById('q-prev').addEventListener('click',function(){showQ(qi-1)});
+document.getElementById('q-next').addEventListener('click',function(){showQ(qi+1)});
+
+// language
+var btns=document.querySelectorAll('.lang button');
+function setLang(l){
+  L=l;document.body.classList.toggle('zh',l==='zh');document.documentElement.lang=l==='zh'?'zh-CN':'en';
+  btns.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.lang===l?'true':'false')});
+  render();try{localStorage.setItem('ks-lang',l)}catch(e){}
+}
+btns.forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.lang)})});
+var start='en';if(location.hash==='#zh')start='zh';else{try{start=localStorage.getItem('ks-lang')||'en'}catch(e){}}
+setLang(start);
+
+// copy
+var copy=document.getElementById('copy');
+copy.addEventListener('click',function(){
+  var s=copy.querySelectorAll('span');
+  function done(){s[0].textContent='Copied';s[1].textContent='已复制';setTimeout(function(){s[0].textContent='Copy email';s[1].textContent='复制邮箱'},1800)}
+  function fb(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var g=getSelection();g.removeAllRanges();g.addRange(r)}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText('kelvinsun58@gmail.com').then(done,fb);else fb();
+});
+
+// talent graph canvas
+var cv=document.getElementById('graph'),cx=cv.getContext('2d'),W=0,H=0,dpr=1,P=[],col={};
+function readCol(){var cs=getComputedStyle(document.documentElement);col.ink=cs.getPropertyValue('--ink').trim();col.sig=cs.getPropertyValue('--signal').trim();col.rule=cs.getPropertyValue('--rule').trim()}
+function seed(){
+  var n=Math.round(Math.min(90,Math.max(36,W*H/14000)));P=[];
+  for(var i=0;i<n;i++){
+    // bias nodes toward the right side so text stays clear
+    var x=W*(0.35+Math.pow(Math.random(),0.7)*0.65);
+    P.push({x:x,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()<.12?3.4:1.8,hot:Math.random()<.12});
+  }
+}
+function size(){dpr=Math.min(2,window.devicePixelRatio||1);var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);seed();readCol();frame()}
+function frame(){
+  cx.clearRect(0,0,W,H);var D=W<600?90:130;
+  for(var i=0;i<P.length;i++){for(var j=i+1;j<P.length;j++){var a=P[i],b=P[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);if(d<D){cx.globalAlpha=(1-d/D)*(a.hot&&b.hot?.9:.35);cx.strokeStyle=(a.hot||b.hot)?col.sig:col.ink;cx.lineWidth=(a.hot&&b.hot)?1.2:.6;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}}
+  cx.globalAlpha=1;
+  P.forEach(function(p){cx.fillStyle=p.hot?col.sig:col.ink;cx.globalAlpha=p.hot?1:.55;cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fill()});
+  cx.globalAlpha=1;
+}
+function step(){P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<W*.3||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1});frame();if(!reduce&&!document.hidden)raf=requestAnimationFrame(step)}
+var raf;size();
+window.addEventListener('resize',function(){cancelAnimationFrame(raf);size();if(!reduce)raf=requestAnimationFrame(step)});
+if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener&&matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){readCol();frame()});
+new MutationObserver(function(){readCol();frame()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&!reduce){cancelAnimationFrame(raf);raf=requestAnimationFrame(step)}});
+if(!reduce)raf=requestAnimationFrame(step);
+})();
+</script>
+
+</body>
+</html>
