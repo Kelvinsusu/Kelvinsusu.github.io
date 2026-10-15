@@ -8,7 +8,7 @@
 <meta name="description" content="Kelvin Chenxin Sun · Building the talent graph for the AI era. 孙辰昕 · 为 AI 时代构建人才图谱">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;900&family=Noto+Serif+SC:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@500;600&family=Lora:ital@1&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;900&family=Noto+Serif+SC:wght@500;700&display=swap">
 <style>
 /* Layout: editorial portfolio. Live talent-graph canvas behind the hero; career told as "chapters", each led by one oversized result; quotes as a single rotating stage; giant email to close. */
 :root{
@@ -159,6 +159,24 @@ body.zh .q{font-family:"Noto Serif SC",serif;font-weight:700;font-size:clamp(26p
 .btn:hover{background:var(--signal);border-color:var(--signal);color:#fff}
 footer .inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:24px 40px;border-top:1px solid var(--rule)}
 
+/* film */
+.film{padding-block:clamp(40px,6vw,72px) 0}
+.film-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}
+.film-snd{font:500 12px var(--f-mono);background:none;border:1px solid var(--rule);border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--ink-2)}
+.film-wrap{position:relative;aspect-ratio:16/9;max-width:100%;background:#f4f4f1;border:1px solid var(--rule);overflow:hidden}
+.film-wrap canvas{width:100%;height:100%;display:block;cursor:pointer}
+.film-play{position:absolute;left:clamp(12px,2vw,24px);bottom:clamp(14px,2.4vw,28px);display:flex;align-items:center;gap:10px;padding:10px 18px 10px 14px;border-radius:999px;border:0;background:#16181a;color:#f4f4f1;font:600 14px var(--f-wide);cursor:pointer;transition:opacity .3s,background .2s}
+body.zh .film-play{font-family:var(--f-zh)}
+.film-play:hover{background:#2c3cff}
+.film-play .ic{width:0;height:0;border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent}
+.film-wrap.on .film-play .ic{width:11px;height:13px;border:0;border-left:4px solid currentColor;border-right:4px solid currentColor}
+.film-wrap.on .film-play{opacity:0}
+.film-wrap.on:hover .film-play,.film-wrap.on .film-play:focus-visible{opacity:1}
+.film-wrap.loading{cursor:progress}
+.film-wrap.on .lb-play,.film-wrap:not(.on) .lb-pause{display:none}
+.film-bar{position:absolute;left:0;right:0;bottom:0;height:3px}
+.film-bar i{display:block;height:100%;background:#2c3cff;transform-origin:left;transform:scaleX(0)}
+
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media (max-width: 960px){
   .top nav{display:none}
@@ -210,6 +228,17 @@ footer .inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap
     <div class="hero-foot">
       <span class="mono"><span class="en">Open to talent leadership roles, advisory and partnerships</span><span class="zh">欢迎人才负责人岗位、顾问与商业合作的交流</span></span>
       <a class="btn" href="#contact"><span class="en">Get in touch</span><span class="zh">联系我</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="film gut" id="film-section" aria-label="Kelvin in 60 seconds">
+  <div class="inner">
+    <div class="film-head"><span class="mono"><span class="en">Kelvin in 60 seconds</span><span class="zh">60 秒了解 Kelvin</span></span><button type="button" class="film-snd" id="filmSound" aria-pressed="false">Sound on</button></div>
+    <div class="film-wrap" id="filmWrap">
+      <canvas id="film" width="1920" height="1080" aria-label="A 60-second animated story about Kelvin Sun"></canvas>
+      <button type="button" class="film-play" id="filmPlay" aria-label="Play"><span class="ic"></span><span class="lb-play"><span class="en">Play film</span><span class="zh">播放短片</span></span><span class="lb-pause"><span class="en">Pause</span><span class="zh">暂停</span></span></button>
+      <div class="film-bar"><i id="filmBar"></i></div>
     </div>
   </div>
 </section>
@@ -443,6 +472,178 @@ if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener
 new MutationObserver(function(){readCol();frame()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&!reduce){cancelAnimationFrame(raf);raf=requestAnimationFrame(step)}});
 if(!reduce)raf=requestAnimationFrame(step);
+})();
+</script>
+<script>
+(function(){
+
+const W=1920,H=1080,CX=960,c=document.getElementById('film'),x=c.getContext('2d');
+const C={bg:'#f4f4f1',ink:'#16181a',soft:'#8a8d90',line:'#16181a',blue:'#2c3cff'};
+const F={en:(w,s)=>`${w} ${s}px "Inter","Archivo",sans-serif`,ser:(s)=>`italic 400 ${s}px "Lora",Georgia,serif`,
+  zh:(w,s)=>`${w} ${s}px "Noto Sans SC","PingFang SC",sans-serif`,mono:(s)=>`500 ${s}px "JetBrains Mono",monospace`};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=v=>{v=clamp(v,0,1);return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2};
+const ap=(t,t0,d=.9)=>ease((t-t0)/d);
+
+// ---------- text
+function line(s,y,font,col,a,opt={}){if(a<=0)return;x.save();x.globalAlpha*=a;x.font=font;x.fillStyle=col;x.textAlign=opt.align||'center';if(opt.ls)x.letterSpacing=opt.ls+'px';x.fillText(s,opt.x||CX,y+(1-a)*14);x.restore()}
+// a caption block: en (may contain \n), zh; fades in at t0, out at t1
+function cap(t,t0,t1,en,zh,y=760,o={}){
+  const a=Math.min(ap(t,t0,.8),1-ap(t,t1,.6));if(a<=0)return;
+  const ls=en.split('\n');ls.forEach((s,i)=>line(s,y+i*66,o.ser?F.ser(54):F.en(500,52),C.ink,a));
+  line(zh,y+ls.length*66+8,F.zh(400,32),C.soft,a);
+}
+function tag(t,t0,t1,s,y=640){const a=Math.min(ap(t,t0,.6),1-ap(t,t1,.5));line(s,y,F.mono(20),C.blue,a,{ls:4})}
+
+// ---------- line drawing
+function pathLen(p){let L=0;for(let i=1;i<p.length;i++)L+=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);return L}
+function draw(p,prog,a=1,w=3,col=C.line){
+  if(prog<=0||a<=0)return;const T=pathLen(p)*clamp(prog,0,1);let acc=0;
+  x.save();x.globalAlpha*=a;x.strokeStyle=col;x.lineWidth=w;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(p[0][0],p[0][1]);
+  for(let i=1;i<p.length;i++){const d=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);if(acc+d>=T){const k=(T-acc)/d;x.lineTo(p[i-1][0]+(p[i][0]-p[i-1][0])*k,p[i-1][1]+(p[i][1]-p[i-1][1])*k);break}x.lineTo(p[i][0],p[i][1]);acc+=d}
+  x.stroke();x.restore();
+}
+// draw a list of paths one after another across [t0,t0+dur]
+function drawSeq(paths,t,t0,dur,a=1,w=3){const n=paths.length;paths.forEach((p,i)=>draw(p,ease((t-t0-dur*i/n)/(dur/n*1.6)),a,w))}
+const arc=(cx,cy,r,a0,a1,n=64)=>Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]});
+const ell=(cx,cy,rx,ry,a0,a1,rot=0,n=72)=>Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n,px=rx*Math.cos(a),py=ry*Math.sin(a);return[cx+px*Math.cos(rot)-py*Math.sin(rot),cy+px*Math.sin(rot)+py*Math.cos(rot)]});
+const curve=(f,n=60)=>Array.from({length:n+1},(_,i)=>f(i/n));
+const bez=(p0,p1,p2,p3)=>curve(s=>{const u=1-s;return[u*u*u*p0[0]+3*u*u*s*p1[0]+3*u*s*s*p2[0]+s*s*s*p3[0],u*u*u*p0[1]+3*u*u*s*p1[1]+3*u*s*s*p2[1]+s*s*s*p3[1]]});
+
+// ---------- illustrations
+const RESUME=[[[810,200],[1110,200],[1110,590],[810,590],[810,200]],[[840,232],[920,232],[920,312],[840,312],[840,232]],
+  [[950,250],[1075,250]],[[950,290],[1040,290]],[[840,370],[1080,370]],[[840,410],[1050,410]],[[840,450],[1075,450]],[[840,490],[1000,490]],[[840,530],[1060,530]]];
+const MAG=[arc(960,390,120,-Math.PI/2,Math.PI*1.5,90),[[1045,475],[1135,565]]];
+const TREE=[[[820,612],[1100,612]],[[952,612],[952,520]],[[968,612],[968,520]],
+  [[960,228],[918,318],[944,314],[892,410],[930,404],[866,512],[1054,512],[990,404],[1028,410],[976,314],[1002,318],[960,228]]];
+const CUP=[[[810,360],[1010,360]],bez([815,360],[818,470],[850,525],[910,525]).concat(bez([910,525],[970,525],[1002,470],[1005,360]).slice(1)),
+  bez([1003,392],[1060,392],[1060,470],[992,470]),[[770,548],[1050,548]],
+  curve(s=>[870+14*Math.sin(s*Math.PI*2.2),340-s*110]),curve(s=>[910+14*Math.sin(s*Math.PI*2.2+1),340-s*130]),curve(s=>[950+14*Math.sin(s*Math.PI*2.2+2),340-s*110])];
+const OX=880,OY=500;
+const OSTRICH=[ell(OX,OY,115,62,0,Math.PI*2,-.12),
+  [[OX-110,OY-18],[OX-150,OY-50],[OX-128,OY-12],[OX-162,OY-20],[OX-118,OY+8]],
+  bez([OX+82,OY-48],[OX+130,OY-110],[OX+80,OY-200],[OX+118,OY-262]),
+  arc(OX+126,OY-270,13,0,Math.PI*2,40),[[OX+138,OY-268],[OX+172,OY-262],[OX+138,OY-260]],
+  [[OX-15,OY+58],[OX-30,OY+140],[OX-10,OY+220],[OX+18,OY+222]],
+  [[OX+30,OY+56],[OX+40,OY+140],[OX+30,OY+220],[OX+58,OY+222]],[[OX-120,OY+226],[OX+160,OY+226]]];
+const FLAGS=[0,1,2].map(i=>{const fx=760+i*200;return[[[fx,412],[fx,300]],[[fx,300],[fx+58,318],[fx,336]]]});
+// graph nodes
+let sd=11;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
+const GN=[];for(let i=1;i<=24;i++){const a=i*2.39996+rnd()*.3,r=70+Math.sqrt(i/24)*290;GN.push([CX+Math.cos(a)*r*1.45,400+Math.sin(a)*r*.62])}
+const GE=[];GN.forEach((p,i)=>{GN.forEach((q,j)=>{if(j>i&&Math.hypot(p[0]-q[0],p[1]-q[1])<170)GE.push([p,q])})});GN.forEach(p=>{if(Math.hypot(p[0]-CX,p[1]-400)<170)GE.push([[CX,400],p])});
+
+// ---------- scenes (each: start, end, dot anchor [x,y,r], draw)
+const S=[
+ {s:0,e:5.5,dot:[CX,420,11],d(t){
+   const k=(t%2.6)/2.6;x.save();x.globalAlpha=(1-k)*.35*ap(t,.6);x.strokeStyle=C.blue;x.lineWidth=2;x.beginPath();x.arc(CX,420,11+k*70,0,6.283);x.stroke();x.restore();
+   cap(t,1.2,9,'Every team starts with one person.','每个团队，都从一个人开始。');}},
+ {s:5.5,e:11.5,dot:[880,272,9],d(t){
+   drawSeq(RESUME,t,.2,2.2);
+   cap(t,.8,5.2,'For decades, we read people like this.','很长一段时间，我们这样读一个人。');
+   line('Titles.  Logos.  Bullet points.',905,F.mono(24),C.soft,Math.min(ap(t,2.4,.7),1-ap(t,5.2,.6)),{ls:2});}},
+ {s:11.5,e:17.5,dot:[CX,390,11],d(t){
+   drawSeq(MAG,t,.1,1.4);
+   cap(t,.7,5.2,'Kelvin spent 16 years\nreading people differently.','孙辰昕用了十六年，换一种方式读人。');
+   line('Less by titles. More by what they built.',960,F.ser(32),C.soft,Math.min(ap(t,2.6,.7),1-ap(t,5.2,.6)));}},
+ {s:17.5,e:24.5,dot:[960,612,9],d(t){
+   drawSeq(TREE,t,.6,2.4);
+   tag(t,.4,3.3,'FUN FACT  ·  冷知识',672);
+   cap(t,.6,3.3,'A giant sequoia can live 3,000 years.\nEvery one began as a seed.','一棵巨杉能活三千年。每一棵，都从一粒种子开始。',752);
+   cap(t,3.9,6.2,'At Sequoia China, he helped\n30 founding teams grow from seed.','在红杉中国，他陪 30 个创始团队从种子长起。',752);}},
+ {s:24.5,e:31.5,dot:[912,214,8],d(t){
+   drawSeq(CUP,t,.2,2.2);
+   tag(t,.4,3.3,'LEGEND  ·  传说',652);
+   cap(t,.6,3.3,'A goatherd named Kaldi\nis said to have discovered coffee.','传说，一位叫 Kaldi 的牧羊人发现了咖啡。',732);
+   cap(t,3.9,6.2,'Kaldi is also a famous speech-AI toolkit.\nIn 2019, he brought its creator to Xiaomi.','Kaldi 也是著名的语音识别工具。2019 年，他主导小米引进了它的作者。',732);}},
+ {s:31.5,e:38.5,dot:[OX+126,OY-271,6],d(t){
+   drawSeq(OSTRICH,t,.2,2.4);
+   tag(t,.4,3.3,'FUN FACT  ·  冷知识',810);
+   cap(t,.6,3.3,'Ostriches don’t actually\nbury their heads in the sand.','鸵鸟其实不会把头埋进沙子里。',888);
+   cap(t,3.9,6.2,'Founders shouldn’t either.\nSo he co-launched the Ostrich Club with ZhenFund.','创业者也不该。于是他和真格基金发起了第一期鸵鸟会。',888);}},
+ {s:38.5,e:44.5,dot:[1160,412,11],d(t){
+   FLAGS.forEach((f,i)=>{drawSeq(f,t,.3+i*.7,.9);const a=ap(t,.3+i*.7,.5);if(i<2){x.save();x.globalAlpha=a;x.fillStyle=C.ink;x.beginPath();x.arc(760+i*200,412,9,0,6.283);x.fill();x.restore()}
+     line(['V-CRUIT','SeaOne','DINQ'][i],470,F.mono(20),C.soft,ap(t,.6+i*.7),{x:760+i*200,ls:2})});
+   cap(t,.8,5.2,'Then he stopped only advising founders,\nand became one. Three times.','后来，他不只陪伴创业者，自己也成了创业者。三次。',700);}},
+ {s:44.5,e:51,dot:[CX,400,12],d(t){
+   GE.forEach((e,i)=>draw([e[0],e[1]],ease((t-.2-i*.035)/.8),.55,1.6));
+   GN.forEach((p,i)=>{const a=ap(t,.1+i*.05,.5);x.save();x.globalAlpha=a;x.fillStyle=i%6===0?C.blue:C.ink;x.beginPath();x.arc(p[0],p[1],i%6===0?6:4,0,6.283);x.fill();x.restore()});
+   cap(t,1.2,5.9,'Now he’s turning that judgment into a map:\nthe talent graph for the AI era.','如今，他把这份判断做成一张图：AI 时代的人才图谱。',800);}},
+ {s:51,e:56.2,dot:[CX,420,11],d(t){
+   const g=ap(t,.2,1.5);x.save();x.globalAlpha=.12*g;x.fillStyle=C.blue;x.beginPath();x.arc(CX,420,60*g,0,6.283);x.fill();x.restore();
+   cap(t,.6,4.7,'Behind every great company\nis someone who believed in a person first.','每一家了不起的公司背后，都有人先相信了一个人。',700,{ser:1});}},
+ {s:56.2,e:60.5,dot:[CX,420,11],d(t){
+   line('Kelvin Sun',640,F.en(600,64),C.ink,ap(t,.3));
+   line('孙辰昕',708,F.zh(400,34),C.soft,ap(t,.6));
+   line('kelvinsusu.github.io',800,F.mono(26),C.blue,ap(t,1.0),{ls:1});}}
+];
+function dotAt(T){
+  const i=S.findIndex(s=>T>=s.s&&T<s.e);const sc=S[i<0?S.length-1:i];const prev=S[Math.max(0,(i<0?S.length-1:i)-1)];
+  const k=i<=0?1:ease((T-sc.s)/.9);const a=prev.dot,b=sc.dot;
+  return[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k];
+}
+function renderAt(T){
+  x.globalAlpha=1;x.fillStyle=C.bg;x.fillRect(0,0,W,H);
+  const sc=S.find(s=>T>=s.s&&T<s.e)||S[S.length-1];const lt=T-sc.s,dur=sc.e-sc.s;
+  const out=sc===S[S.length-1]?1:1-ease((lt-(dur-.6))/.6);
+  x.save();x.globalAlpha=out;sc.d(lt);x.restore();
+  const d=dotAt(T);x.fillStyle=C.blue;x.beginPath();x.arc(d[0],d[1],d[2]*Math.min(1,T/.6+.001),0,6.283);x.fill();
+  // final fade to bg
+};
+
+// ---- BGM: same synthesis as the MP4 (D major, 72 BPM), rendered once in the browser
+function makeBGM(){
+  const SR=22050,DUR=60,N=SR*DUR,Lc=new Float32Array(N),Rc=new Float32Array(N);
+  let s2=3;const r2=()=>{s2=(s2*16807)%2147483647;return s2/2147483647};
+  const hz=m=>440*Math.pow(2,(m-69)/12),beat=60/72,bar=4*beat;
+  const prog=[{b:38,p:[50,54,57,61,64],a:[62,66,69,73,76,73,69,66]},{b:35,p:[50,54,57,61,64],a:[59,62,66,69,74,69,66,62]},
+    {b:31,p:[50,54,57,59,62],a:[55,59,62,66,69,66,62,59]},{b:33,p:[49,52,54,57,64],a:[57,61,64,66,69,66,64,61]}];
+  function add(fn,len,start,pan,gain){const i0=Math.floor(start*SR),n=Math.min(Math.floor(len*SR),N-i0);if(n<=0)return;
+    const gl=Math.cos((pan+1)*Math.PI/4)*gain,gr=Math.sin((pan+1)*Math.PI/4)*gain;for(let i=0;i<n;i++){const v=fn(i/SR);Lc[i0+i]+=v*gl;Rc[i0+i]+=v*gr}}
+  const TAU=Math.PI*2;
+  const piano=(m,v)=>{const f=hz(m),d=1.1+f/900;return t=>(Math.sin(TAU*f*t)+.35*Math.sin(TAU*2*f*t)*Math.exp(-t*3)+.12*Math.sin(TAU*3*f*t)*Math.exp(-t*6))*(1-Math.exp(-t*180))*Math.exp(-t*d)*v};
+  const pad=(ms,len)=>{const fs=[];ms.forEach(m=>[-.07,0,.06].forEach(dt=>fs.push([hz(m)*Math.pow(2,dt/12),r2()*6.28])));const k=1/(ms.length*3);
+    return t=>{let s=0;for(const [f,p] of fs)s+=Math.sin(TAU*f*t+p)+.18*Math.sin(TAU*2*f*t);return s*k*Math.min(1,t/1.6)*Math.max(0,Math.min(1,(len-t)/1.8))}};
+  const bass=(m,len)=>{const f=hz(m);return t=>(Math.sin(TAU*f*t)+.25*Math.sin(TAU*2*f*t))*Math.min(1,t/.08)*Math.exp(-t*.5)*Math.max(0,Math.min(1,(len-t)/.6))};
+  for(let b=0;b<19;b++){const ch=prog[b%4],t0=b*bar,intro=b<2,outro=b>=16;
+    add(pad(ch.p,bar+1.6),bar+1.6,t0,0,.55);
+    if(!intro)add(bass(ch.b,bar+.4),bar+.4,t0,0,.32);
+    ch.a.forEach((m,k)=>{if((intro||outro)&&k%2)return;const v=.22+.06*r2()-(k%2?.05:0);add(piano(m,v),3.2,t0+k*beat/2,r2()*.9-.45,1)});
+    if(b>=4&&b<16&&b%2===0)add(piano([81,78,79,76][(b/2)%4],.16),4,t0+beat*2.5,.2,1);
+  }
+  const oc=new OfflineAudioContext(2,N,SR),buf=oc.createBuffer(2,N,SR);buf.copyToChannel(Lc,0);buf.copyToChannel(Rc,1);
+  const src=oc.createBufferSource();src.buffer=buf;const lp=oc.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500;
+  const irN=Math.floor(3.2*SR),ir=oc.createBuffer(2,irN,SR);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<irN;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/SR*2.2)}
+  let e=0;for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<irN;i++)e+=d[i]*d[i]}e=Math.sqrt(e/2)||1;for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<irN;i++)d[i]/=e}
+  const cv=oc.createConvolver();cv.normalize=false;cv.buffer=ir;const dry=oc.createGain(),wet=oc.createGain();dry.gain.value=.62;wet.gain.value=.45;
+  src.connect(lp);lp.connect(dry).connect(oc.destination);lp.connect(cv).connect(wet).connect(oc.destination);src.start();
+  return oc.startRendering().then(out=>{let pk=0;for(let ch=0;ch<2;ch++){const d=out.getChannelData(ch);for(let i=0;i<d.length;i++)pk=Math.max(pk,Math.abs(d[i]))}
+    const g=Math.pow(10,-6/20)/(pk||1);for(let ch=0;ch<2;ch++){const d=out.getChannelData(ch);for(let i=0;i<d.length;i++){const t=i/SR;d[i]*=g*Math.min(1,t/2)*Math.max(0,Math.min(1,(DUR-t)/4))}}return out});
+}
+
+// ---- player
+const wrap=document.getElementById('filmWrap'),btn=document.getElementById('filmPlay'),bar=document.getElementById('filmBar'),snd=document.getElementById('filmSound');
+let playing=false,offset=0,t0=0,raf=0,ac=null,bgm=null,srcN=null,gainN=null,muted=false;
+const DUR=60;
+function now(){return playing?offset+(performance.now()-t0)/1000:offset}
+function tick(){const T=now();if(T>=DUR){renderAt(DUR-.01);stop(true);return}renderAt(T);bar.style.transform='scaleX('+(T/DUR)+')';raf=requestAnimationFrame(tick)}
+function startAudio(at){if(!ac||!bgm)return;try{srcN=ac.createBufferSource();srcN.buffer=bgm;gainN=ac.createGain();gainN.gain.value=muted?0:1;srcN.connect(gainN).connect(ac.destination);srcN.start(0,at)}catch(e){}}
+function stopAudio(){try{srcN&&srcN.stop()}catch(e){}srcN=null}
+async function play(){
+  if(offset>=DUR-.05)offset=0;
+  wrap.classList.add('on');btn.setAttribute('aria-label','Pause');
+  if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  if(ac&&ac.state==='suspended')await ac.resume();
+  if(ac&&!bgm){wrap.classList.add('loading');try{bgm=await makeBGM()}catch(e){bgm=null}wrap.classList.remove('loading')}
+  playing=true;t0=performance.now();startAudio(offset);raf=requestAnimationFrame(tick);
+}
+function stop(ended){if(playing)offset=now();playing=false;cancelAnimationFrame(raf);stopAudio();wrap.classList.remove('on');btn.setAttribute('aria-label','Play');if(ended){offset=DUR;bar.style.transform='scaleX(1)'}}
+btn.addEventListener('click',()=>playing?stop():play());
+c.addEventListener('click',()=>playing?stop():play());
+snd.addEventListener('click',()=>{muted=!muted;snd.setAttribute('aria-pressed',String(muted));snd.textContent=muted?'Sound off':'Sound on';if(gainN)gainN.gain.value=muted?0:1});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)stop()});
+Promise.all([F.en(500,50),F.en(600,50),F.ser(50),F.mono(20)].map(f=>document.fonts.load(f,'A')).concat([document.fonts.load(F.zh(400,30),'孙')])).catch(()=>{}).then(()=>renderAt(3.2));
+renderAt(3.2);
+
 })();
 </script>
 
