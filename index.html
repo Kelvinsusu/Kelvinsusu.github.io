@@ -232,11 +232,11 @@ body.zh .film-play{font-family:var(--f-zh)}
   </div>
 </section>
 
-<section class="film gut" id="film-section" aria-label="Kelvin in 60 seconds">
+<section class="film gut" id="film-section" aria-label="Kelvin, in a short story">
   <div class="inner">
-    <div class="film-head"><span class="mono"><span class="en">Kelvin in 60 seconds</span><span class="zh">60 秒了解 Kelvin</span></span><button type="button" class="film-snd" id="filmSound" aria-pressed="false">Sound on</button></div>
+    <div class="film-head"><span class="mono"><span class="en">Kelvin, in a short story</span><span class="zh">一个关于 Kelvin 的小故事</span></span><button type="button" class="film-snd" id="filmSound" aria-pressed="false">Sound on</button></div>
     <div class="film-wrap" id="filmWrap">
-      <canvas id="film" width="1920" height="1080" aria-label="A 60-second animated story about Kelvin Sun"></canvas>
+      <canvas id="film" width="1920" height="1080" aria-label="A short animated story about Kelvin Sun"></canvas>
       <button type="button" class="film-play" id="filmPlay" aria-label="Play"><span class="ic"></span><span class="lb-play"><span class="en">Play film</span><span class="zh">播放短片</span></span><span class="lb-pause"><span class="en">Pause</span><span class="zh">暂停</span></span></button>
       <div class="film-bar"><i id="filmBar"></i></div>
     </div>
@@ -478,7 +478,7 @@ if(!reduce)raf=requestAnimationFrame(step);
 (function(){
 
 const W=1920,H=1080,CX=960,c=document.getElementById('film'),x=c.getContext('2d');
-const C={bg:'#f4f4f1',ink:'#16181a',soft:'#8a8d90',line:'#16181a',blue:'#2c3cff'};
+const C={bg:'#f4f4f1',ink:'#16181a',soft:'#8a8d90',zh:'#64676b',line:'#16181a',blue:'#2c3cff'};
 const F={en:(w,s)=>`${w} ${s}px "Inter","Archivo",sans-serif`,ser:(s)=>`italic 400 ${s}px "Lora",Georgia,serif`,
   zh:(w,s)=>`${w} ${s}px "Noto Sans SC","PingFang SC",sans-serif`,mono:(s)=>`500 ${s}px "JetBrains Mono",monospace`};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -491,7 +491,7 @@ function line(s,y,font,col,a,opt={}){if(a<=0)return;x.save();x.globalAlpha*=a;x.
 function cap(t,t0,t1,en,zh,y=760,o={}){
   const a=Math.min(ap(t,t0,.8),1-ap(t,t1,.6));if(a<=0)return;
   const ls=en.split('\n');ls.forEach((s,i)=>line(s,y+i*66,o.ser?F.ser(54):F.en(500,52),C.ink,a));
-  line(zh,y+ls.length*66+8,F.zh(400,32),C.soft,a);
+  line(zh,y+ls.length*66+22,F.zh(400,40),C.zh,a);
 }
 function tag(t,t0,t1,s,y=640){const a=Math.min(ap(t,t0,.6),1-ap(t,t1,.5));line(s,y,F.mono(20),C.blue,a,{ls:4})}
 
@@ -533,49 +533,52 @@ const GN=[];for(let i=1;i<=24;i++){const a=i*2.39996+rnd()*.3,r=70+Math.sqrt(i/2
 const GE=[];GN.forEach((p,i)=>{GN.forEach((q,j)=>{if(j>i&&Math.hypot(p[0]-q[0],p[1]-q[1])<170)GE.push([p,q])})});GN.forEach(p=>{if(Math.hypot(p[0]-CX,p[1]-400)<170)GE.push([[CX,400],p])});
 
 // ---------- scenes (each: start, end, dot anchor [x,y,r], draw)
+// durations in seconds; every caption stays up long enough to read both lines
 const S=[
- {s:0,e:5.5,dot:[CX,420,11],d(t){
+ {dur:5.5,dot:[CX,420,11],d(t){
    const k=(t%2.6)/2.6;x.save();x.globalAlpha=(1-k)*.35*ap(t,.6);x.strokeStyle=C.blue;x.lineWidth=2;x.beginPath();x.arc(CX,420,11+k*70,0,6.283);x.stroke();x.restore();
-   cap(t,1.2,9,'Every team starts with one person.','每个团队，都从一个人开始。');}},
- {s:5.5,e:11.5,dot:[880,272,9],d(t){
+   cap(t,1.0,99,'Every team starts with one person.','每个团队，都从一个人开始。');}},
+ {dur:7.5,dot:[880,272,9],d(t){
    drawSeq(RESUME,t,.2,2.2);
-   cap(t,.8,5.2,'For decades, we read people like this.','很长一段时间，我们这样读一个人。');
-   line('Titles.  Logos.  Bullet points.',905,F.mono(24),C.soft,Math.min(ap(t,2.4,.7),1-ap(t,5.2,.6)),{ls:2});}},
- {s:11.5,e:17.5,dot:[CX,390,11],d(t){
+   cap(t,.8,99,'For decades, we read people like this.','很长一段时间，我们这样读一个人。');
+   line('Titles.  Logos.  Bullet points.',940,F.mono(24),C.soft,ap(t,2.6,.7),{ls:2});}},
+ {dur:8,dot:[CX,390,11],d(t){
    drawSeq(MAG,t,.1,1.4);
-   cap(t,.7,5.2,'Kelvin spent 16 years\nreading people differently.','孙辰昕用了十六年，换一种方式读人。');
-   line('Less by titles. More by what they built.',960,F.ser(32),C.soft,Math.min(ap(t,2.6,.7),1-ap(t,5.2,.6)));}},
- {s:17.5,e:24.5,dot:[960,612,9],d(t){
+   cap(t,.7,99,'Kelvin spent 16 years\nreading people differently.','孙辰昕用了十六年，换一种方式读人。');
+   line('Less by titles. More by what they built.',1000,F.ser(32),C.soft,ap(t,3.0,.7));}},
+ {dur:12.5,dot:[960,612,9],d(t){
    drawSeq(TREE,t,.6,2.4);
-   tag(t,.4,3.3,'FUN FACT  ·  冷知识',672);
-   cap(t,.6,3.3,'A giant sequoia can live 3,000 years.\nEvery one began as a seed.','一棵巨杉能活三千年。每一棵，都从一粒种子开始。',752);
-   cap(t,3.9,6.2,'At Sequoia China, he helped\n30 founding teams grow from seed.','在红杉中国，他陪 30 个创始团队从种子长起。',752);}},
- {s:24.5,e:31.5,dot:[912,214,8],d(t){
+   tag(t,.4,5.6,'FUN FACT  ·  冷知识',672);
+   cap(t,.6,5.6,'A giant sequoia can live 3,000 years.\nEvery one began as a seed.','一棵巨杉能活三千年。每一棵，都从一粒种子开始。',752);
+   cap(t,6.3,99,'At Sequoia China, he helped\n30 founding teams grow from seed.','在红杉中国，他陪 30 个创始团队从种子长起。',752);}},
+ {dur:13.5,dot:[912,214,8],d(t){
    drawSeq(CUP,t,.2,2.2);
-   tag(t,.4,3.3,'LEGEND  ·  传说',652);
-   cap(t,.6,3.3,'A goatherd named Kaldi\nis said to have discovered coffee.','传说，一位叫 Kaldi 的牧羊人发现了咖啡。',732);
-   cap(t,3.9,6.2,'Kaldi is also a famous speech-AI toolkit.\nIn 2019, he brought its creator to Xiaomi.','Kaldi 也是著名的语音识别工具。2019 年，他主导小米引进了它的作者。',732);}},
- {s:31.5,e:38.5,dot:[OX+126,OY-271,6],d(t){
+   tag(t,.4,5.8,'LEGEND  ·  传说',652);
+   cap(t,.6,5.8,'A goatherd named Kaldi\nis said to have discovered coffee.','传说，一位叫 Kaldi 的牧羊人发现了咖啡。',732);
+   cap(t,6.5,99,'Kaldi is also a famous speech-AI toolkit.\nIn 2019, he brought its creator to Xiaomi.','Kaldi 也是著名的语音识别工具。2019 年，他主导小米引进了它的作者。',732);}},
+ {dur:13,dot:[OX+126,OY-271,6],d(t){
    drawSeq(OSTRICH,t,.2,2.4);
-   tag(t,.4,3.3,'FUN FACT  ·  冷知识',810);
-   cap(t,.6,3.3,'Ostriches don’t actually\nbury their heads in the sand.','鸵鸟其实不会把头埋进沙子里。',888);
-   cap(t,3.9,6.2,'Founders shouldn’t either.\nSo he co-launched the Ostrich Club with ZhenFund.','创业者也不该。于是他和真格基金发起了第一期鸵鸟会。',888);}},
- {s:38.5,e:44.5,dot:[1160,412,11],d(t){
+   tag(t,.4,5.6,'FUN FACT  ·  冷知识',790);
+   cap(t,.6,5.6,'Ostriches don’t actually\nbury their heads in the sand.','鸵鸟其实不会把头埋进沙子里。',860);
+   cap(t,6.3,99,'Founders shouldn’t either.\nSo he co-launched the Ostrich Club with ZhenFund.','创业者也不该。于是他和真格基金发起了第一期鸵鸟会。',860);}},
+ {dur:8.5,dot:[1160,412,11],d(t){
    FLAGS.forEach((f,i)=>{drawSeq(f,t,.3+i*.7,.9);const a=ap(t,.3+i*.7,.5);if(i<2){x.save();x.globalAlpha=a;x.fillStyle=C.ink;x.beginPath();x.arc(760+i*200,412,9,0,6.283);x.fill();x.restore()}
      line(['V-CRUIT','SeaOne','DINQ'][i],470,F.mono(20),C.soft,ap(t,.6+i*.7),{x:760+i*200,ls:2})});
-   cap(t,.8,5.2,'Then he stopped only advising founders,\nand became one. Three times.','后来，他不只陪伴创业者，自己也成了创业者。三次。',700);}},
- {s:44.5,e:51,dot:[CX,400,12],d(t){
+   cap(t,1.2,99,'Then he stopped only advising founders,\nand became one. Three times.','后来，他不只陪伴创业者，自己也成了创业者。三次。',700);}},
+ {dur:9,dot:[CX,400,12],d(t){
    GE.forEach((e,i)=>draw([e[0],e[1]],ease((t-.2-i*.035)/.8),.55,1.6));
    GN.forEach((p,i)=>{const a=ap(t,.1+i*.05,.5);x.save();x.globalAlpha=a;x.fillStyle=i%6===0?C.blue:C.ink;x.beginPath();x.arc(p[0],p[1],i%6===0?6:4,0,6.283);x.fill();x.restore()});
-   cap(t,1.2,5.9,'Now he’s turning that judgment into a map:\nthe talent graph for the AI era.','如今，他把这份判断做成一张图：AI 时代的人才图谱。',800);}},
- {s:51,e:56.2,dot:[CX,420,11],d(t){
+   cap(t,1.2,99,'Now he’s turning that judgment into a map:\nthe talent graph for the AI era.','如今，他把这份判断做成一张图：AI 时代的人才图谱。',800);}},
+ {dur:7.5,dot:[CX,420,11],d(t){
    const g=ap(t,.2,1.5);x.save();x.globalAlpha=.12*g;x.fillStyle=C.blue;x.beginPath();x.arc(CX,420,60*g,0,6.283);x.fill();x.restore();
-   cap(t,.6,4.7,'Behind every great company\nis someone who believed in a person first.','每一家了不起的公司背后，都有人先相信了一个人。',700,{ser:1});}},
- {s:56.2,e:60.5,dot:[CX,420,11],d(t){
+   cap(t,.6,99,'Behind every great company\nis someone who believed in a person first.','每一家了不起的公司背后，都有人先相信了一个人。',700,{ser:1});}},
+ {dur:6,dot:[CX,420,11],d(t){
    line('Kelvin Sun',640,F.en(600,64),C.ink,ap(t,.3));
-   line('孙辰昕',708,F.zh(400,34),C.soft,ap(t,.6));
-   line('kelvinsusu.github.io',800,F.mono(26),C.blue,ap(t,1.0),{ls:1});}}
+   line('孙辰昕',712,F.zh(400,40),C.zh,ap(t,.6));
+   line('kelvinsusu.github.io',810,F.mono(26),C.blue,ap(t,1.0),{ls:1});}}
 ];
+(function(){let acc=0;S.forEach(sc=>{sc.s=acc;acc+=sc.dur;sc.e=acc})})();
+const TOTAL=S[S.length-1].e;
 function dotAt(T){
   const i=S.findIndex(s=>T>=s.s&&T<s.e);const sc=S[i<0?S.length-1:i];const prev=S[Math.max(0,(i<0?S.length-1:i)-1)];
   const k=i<=0?1:ease((T-sc.s)/.9);const a=prev.dot,b=sc.dot;
@@ -590,9 +593,9 @@ function renderAt(T){
   // final fade to bg
 };
 
-// ---- BGM: same synthesis as the MP4 (D major, 72 BPM), rendered once in the browser
-function makeBGM(){
-  const SR=22050,DUR=60,N=SR*DUR,Lc=new Float32Array(N),Rc=new Float32Array(N);
+// ---- BGM: same synthesis as the MP4 (D major, 72 BPM), rendered once in the browser, length follows the film
+function makeBGM(DUR){
+  const SR=22050,N=SR*DUR,Lc=new Float32Array(N),Rc=new Float32Array(N);
   let s2=3;const r2=()=>{s2=(s2*16807)%2147483647;return s2/2147483647};
   const hz=m=>440*Math.pow(2,(m-69)/12),beat=60/72,bar=4*beat;
   const prog=[{b:38,p:[50,54,57,61,64],a:[62,66,69,73,76,73,69,66]},{b:35,p:[50,54,57,61,64],a:[59,62,66,69,74,69,66,62]},
@@ -604,11 +607,12 @@ function makeBGM(){
   const pad=(ms,len)=>{const fs=[];ms.forEach(m=>[-.07,0,.06].forEach(dt=>fs.push([hz(m)*Math.pow(2,dt/12),r2()*6.28])));const k=1/(ms.length*3);
     return t=>{let s=0;for(const [f,p] of fs)s+=Math.sin(TAU*f*t+p)+.18*Math.sin(TAU*2*f*t);return s*k*Math.min(1,t/1.6)*Math.max(0,Math.min(1,(len-t)/1.8))}};
   const bass=(m,len)=>{const f=hz(m);return t=>(Math.sin(TAU*f*t)+.25*Math.sin(TAU*2*f*t))*Math.min(1,t/.08)*Math.exp(-t*.5)*Math.max(0,Math.min(1,(len-t)/.6))};
-  for(let b=0;b<19;b++){const ch=prog[b%4],t0=b*bar,intro=b<2,outro=b>=16;
+  const NB=Math.floor(DUR/bar)+1;
+  for(let b=0;b<NB;b++){const ch=prog[b%4],t0=b*bar,intro=b<2,outro=b>=NB-3;
     add(pad(ch.p,bar+1.6),bar+1.6,t0,0,.55);
     if(!intro)add(bass(ch.b,bar+.4),bar+.4,t0,0,.32);
     ch.a.forEach((m,k)=>{if((intro||outro)&&k%2)return;const v=.22+.06*r2()-(k%2?.05:0);add(piano(m,v),3.2,t0+k*beat/2,r2()*.9-.45,1)});
-    if(b>=4&&b<16&&b%2===0)add(piano([81,78,79,76][(b/2)%4],.16),4,t0+beat*2.5,.2,1);
+    if(b>=4&&b<NB-3&&b%2===0)add(piano([81,78,79,76][(b/2)%4],.16),4,t0+beat*2.5,.2,1);
   }
   const oc=new OfflineAudioContext(2,N,SR),buf=oc.createBuffer(2,N,SR);buf.copyToChannel(Lc,0);buf.copyToChannel(Rc,1);
   const src=oc.createBufferSource();src.buffer=buf;const lp=oc.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500;
@@ -623,7 +627,7 @@ function makeBGM(){
 // ---- player
 const wrap=document.getElementById('filmWrap'),btn=document.getElementById('filmPlay'),bar=document.getElementById('filmBar'),snd=document.getElementById('filmSound');
 let playing=false,offset=0,t0=0,raf=0,ac=null,bgm=null,srcN=null,gainN=null,muted=false;
-const DUR=60;
+const DUR=TOTAL;
 function now(){return playing?offset+(performance.now()-t0)/1000:offset}
 function tick(){const T=now();if(T>=DUR){renderAt(DUR-.01);stop(true);return}renderAt(T);bar.style.transform='scaleX('+(T/DUR)+')';raf=requestAnimationFrame(tick)}
 function startAudio(at){if(!ac||!bgm)return;try{srcN=ac.createBufferSource();srcN.buffer=bgm;gainN=ac.createGain();gainN.gain.value=muted?0:1;srcN.connect(gainN).connect(ac.destination);srcN.start(0,at)}catch(e){}}
@@ -633,7 +637,7 @@ async function play(){
   wrap.classList.add('on');btn.setAttribute('aria-label','Pause');
   if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
   if(ac&&ac.state==='suspended')await ac.resume();
-  if(ac&&!bgm){wrap.classList.add('loading');try{bgm=await makeBGM()}catch(e){bgm=null}wrap.classList.remove('loading')}
+  if(ac&&!bgm){wrap.classList.add('loading');try{bgm=await makeBGM(DUR)}catch(e){bgm=null}wrap.classList.remove('loading')}
   playing=true;t0=performance.now();startAudio(offset);raf=requestAnimationFrame(tick);
 }
 function stop(ended){if(playing)offset=now();playing=false;cancelAnimationFrame(raf);stopAudio();wrap.classList.remove('on');btn.setAttribute('aria-label','Play');if(ended){offset=DUR;bar.style.transform='scaleX(1)'}}
